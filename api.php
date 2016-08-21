@@ -3,89 +3,44 @@
 
 include("mysqlconnect.php");
 
-    function GetImageExtension($imagetype)
-   	 {
-       if(empty($imagetype)) return false;
-       switch($imagetype)
-       {
-           case 'image/bmp': return '.bmp';
-           case 'image/gif': return '.gif';
-           case 'image/jpeg': return '.jpg';
-           case 'image/png': return '.png';
-           default: return false;
-       }
-     }
-
-
 header("content-type:application/json");
 
-$pg1 = array(
-       array
-       (
-            'username' => 'facingdown',
-            'profile_pic' => 'img/default-avatar.png'
-       ),
-       array
-       (
-            'username' => 'doggy_bag',
-            'profile_pic' => 'img/default-avatar.png'
-       ),
-       array
-       (
-            'username' => 'goingoutside',
-            'profile_pic' => 'img/default-avatar.png'
-       ),
-       array
-       (
-            'username' => 'redditdigg',
-            'profile_pic' => 'img/default-avatar.png'
-       ),
-       array
-       (
-            'username' => 'lots_of_pudding',
-            'profile_pic' => 'img/default-avatar.png'
-       ),
-       'nextpage' => '#pg2'
-);
-
-$pg2 = array(
-       array
-       (
-           'username' => 'treehousedude',
-           'profile_pic' => 'img/default-avatar.png'
-       ),
-       array
-       (
-           'username' => 'anonymous',
-           'profile_pic' => 'img/default-avatar.png'
-       ),
-       array
-       (
-           'username' => 'clever_username_99',
-           'profile_pic' => 'img/default-avatar.png'
-       ),
-       'nextpage' => 'end'
-);
-
-
-// $_POST['page'] tells us which array of results to load.
-// this can be more complex once you implement a functional database.
-if($_POST['action'] == 'delete'){
-print "Hello world1!";
-
+if($_GET['action'] == 'list'){
+      $query_list = "SELECT * FROM images_tbl";
+      $result = mysql_query($query_list) or die("error in $query_list == ----> ".mysql_error());
+      $jsonResponse = array();
+      
+      $index = 0;
+      while($row = mysql_fetch_assoc($result)){
+        $jsonResponse[$index] = $row;
+        $index++;
+      }
+      echo json_encode($jsonResponse);
 }
-  //echo json_encode($pg1);
+
+if($_POST['action'] == 'delete'){
+      $name = $_POST['image_id']
+      $query_delete="DELETE from images_tbl where image_id='$image_id';";
+
+      mysql_query($query_delete) or die("error in $query_delete == ----> ".mysql_error());
+
+      $response = array('status' => 'ok', 'msg' => 'Image deleted!');
+      echo json_encode($response);
+}
 
 if($_POST['action'] == 'save'){
-echo json_encode($pg1);
 
-     	//$query_upload="INSERT into images_tbl (image_name, image_path) VALUES ('bla', 'bla2');";
-    	//mysql_query($query_upload) or die("error in $query_upload == ----> ".mysql_error());
+      $name = $_POST['payload']['name'];
+      $description = $_POST['payload']['description'];
+      $dimensions = $_POST['payload']['dimensions'];
+      $content = $_POST['payload']['content'];
 
-  //echo json_encode($pg1);
+     	$query_save="INSERT into images_tbl (image_name, image_description, image_dimensions, image_content) VALUES ('$name', '$description', '$dimensions', '$content');";
+    	mysql_query($query_save) or die("error in $query_save == ----> ".mysql_error());
 
+      $response = array('status' => 'ok', 'msg' => 'Image saved!');
+      echo json_encode($response);
 }
-  //echo json_encode($pg2);
 
 exit();
 

@@ -5,30 +5,37 @@ requirejs.config({
 });
 
 require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
-    function Item(id, titlu, descriere, dimensiuni){
+    function Item(id, title, description, dimensions, content){
         this.id = ko.observable(id);
-        this.titlu = ko.observable(titlu);
-        this.descriere = ko.observable(descriere);
-        this.dimensiuni = ko.observable(dimensiuni);
+        this.title = ko.observable(title);
+        this.description = ko.observable(description);
+        this.dimensions = ko.observable(dimensions);
+        this.content = ko.observable(content);
     }
 
-    var ListViewModel = function (initialData) {
+    var ListViewModel = function () {
         var self = this;
         window.viewModel = self;
 
         self.fileInput = ko.observable();
-        self.fileName = ko.observable();
         self.someReader =  new FileReader();
 
 
         self.saveMode = ko.observable("pictura");
 
-        self.list = ko.observableArray(initialData);
+        self.list = ko.observableArray([]);
+
+        $.get(self.getUrl, {action : "list"}).complete(function (result) {
+            self.list(result);
+        });
+
         self.pageSize = ko.observable(10);
         self.pageIndex = ko.observable(0);
         self.selectedItem = ko.observable();
+        
         self.saveUrl = 'api.php';
         self.deleteUrl = 'api.php';
+        self.getUrl = 'api.php';
 
         self.edit = function (item) {
             self.selectedItem(item);
@@ -48,7 +55,7 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
             if (item.id()) {
                 if (confirm('Are you sure you wish to delete this item?')) {
 
-                    $.post(self.deleteUrl, {action : "delete", payload: item}).complete(function (result) {
+                    $.post(self.deleteUrl, {action : "delete", image_id: item.id}).complete(function (result) {
                         self.list.remove(item);
                         if (self.pageIndex() > self.maxPageIndex()) {
                             self.moveToPage(self.maxPageIndex());

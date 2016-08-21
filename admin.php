@@ -12,30 +12,6 @@
 <body>
 <div class="container my-custom-container">
 
-<?php
-include("mysqlconnect.php");
-
-$select_query = "SELECT image_path FROM  images_tbl ORDER by image_id DESC";
-$sql = mysql_query($select_query) or die(mysql_error());
-while($row = mysql_fetch_array($sql,MYSQL_BOTH)){
-
-?>
-
-<table style="border-collapse: collapse; font: 12px Tahoma;" border="1" cellspacing="5" cellpadding="5">
-<tbody><tr>
-<td>
-
-<?php echo $row["image_path"]?>
-
-</td>
-</tr>
-</tbody></table>
-
-<?php
-}
-?>
-
-
     <fieldset class="form-group row">
         <legend>Salveaza imaginea in :</legend>
         <div class="radio">
