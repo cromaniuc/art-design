@@ -25,6 +25,10 @@ if(isset($_GET['action']) && $_GET['action'] == 'list'){
 
 if(isset($_POST['action']) &&  $_POST['action'] == 'delete'){
     
+      $id = $_POST['id'];
+      $query_delete = "DELETE FROM images_tbl WHERE id = '$id'";
+      mysql_query($query_delete) or die("error in $query_save == ----> ".mysql_error());
+
       $response = array('status' => 'ok', 'msg' => 'Image deleted!');
       echo json_encode($response);
 }
@@ -41,7 +45,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'save'){
      	$query_save="INSERT into images_tbl (title, description, dimensions, content, isPictura, submission_date) VALUES ('$name', '$description', '$dimensions', '$content', '$isPictura', now());";
     	mysql_query($query_save) or die("error in $query_save == ----> ".mysql_error());
 
-      $response = array('status','Image saved!');
+      $response = array('status' => 'ok', 'msg' => 'Image saved!');
       echo json_encode($response);
 }
 

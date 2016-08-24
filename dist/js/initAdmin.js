@@ -76,15 +76,24 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
             self.moveToPage(self.maxPageIndex());
         };
         self.remove = function (item) {
-            if (item.id()) {
+            if (item.id) {
                 if (confirm('Are you sure you wish to delete this item?')) {
 
-                    $.post(self.deleteUrl, {action : "delete", image_id: item.id}).complete(function (result) {
-                        self.list.remove(item);
-                        if (self.pageIndex() > self.maxPageIndex()) {
-                            self.moveToPage(self.maxPageIndex());
-                        }
-                    });
+                      $.ajax({
+                        url: self.deleteUrl,
+                        type: 'post',
+                        dataType: 'text',
+                        success: function (result) {
+                            self.list.remove(item);
+                            if (self.pageIndex() > self.maxPageIndex()) {
+                                    self.moveToPage(self.maxPageIndex());
+                            }
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                             alert(errorThrown);
+                        },
+                        data: {'action' : "delete", 'id': item.id}
+                      });
                 }
             }
             else {
