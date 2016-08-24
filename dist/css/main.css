@@ -60,11 +60,26 @@ h2.text-header {
 .top-buffer { margin-top:30px; }
 .top-buffer h2{ margin-top:5%; }
 
-blockquote p {
-    color: #0269C2;
+blockquote p {color: #0269C2;}
+
+.im-centered {
+    margin: 0 auto;
+    width: 80%;
 }
-.im-centered {margin: 0 auto;
-    width: 80%;}
+
+.image-container {
+    background-image: url("../../images/frame.png");
+    width: 698px;
+    height: 594px;
+    padding-top: 12%;
+    padding-left: 14%;
+}
+
+.image-overlay {
+    width: 78%;
+    height: 78%;
+}
+
 @media (min-width: 768px) {
     .my-custom-container{
         width:600px;

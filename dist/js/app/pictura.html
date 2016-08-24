@@ -2,9 +2,10 @@
 
 
     <!-- ko foreach: picturi -->
-    <img   src="images/frame.png">
-    <img  data-bind="attr:{src: content}"/>
-
+    <div class="image-container">
+        <img  class="image-overlay" data-bind="attr:{src: content}"/>
+    </div>
+    
     <dl>
         <dt class="col-sm-3">Titlu</dt>
         <dd class="col-sm-9" data-bind="text: title"></dd>

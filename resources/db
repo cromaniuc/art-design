@@ -1,0 +1,42 @@
+--
+-- Database: `ciprian_romaniuc`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `images_tbl`
+--
+
+CREATE TABLE `images_tbl` (
+  `id` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `dimensions` varchar(200) DEFAULT NULL,
+  `content` longblob NOT NULL,
+  `submission_date` timestamp NULL DEFAULT NULL,
+  `isPictura` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `images_tbl`
+--
+ALTER TABLE `images_tbl`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `images_tbl`
+--
+ALTER TABLE `images_tbl`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
