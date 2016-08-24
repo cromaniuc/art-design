@@ -1,9 +1,7 @@
 <div class="text-xs-center">
-<img class="img-fluid img-thumbnail m-b-2"  src="images/design/boema.jpg">
-<img class="img-fluid img-thumbnail m-b-2"  src="images/design/laconac1.jpg">
-<img class="img-fluid img-thumbnail m-b-2"  src="images/design/laconac2.jpg">
-<img  class="img-fluid img-thumbnail m-b-2" src="images/design/laconac3.jpg">
-<img class="img-fluid img-thumbnail m-b-2"  src="images/design/locuinta1.jpg">
-<img class="img-fluid img-thumbnail m-b-2"  src="images/design/locuinta2.jpg">
-<img  class="img-fluid img-thumbnail m-b-2" src="images/design/locuinta3.jpg">
+	<!-- ko foreach: designImages -->
+   		<img class="img-fluid img-thumbnail m-b-2"  data-bind="attr:{src: content}">
+    <!-- /ko -->
+	
 </div>
+

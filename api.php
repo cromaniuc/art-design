@@ -5,8 +5,13 @@ include("mysqlconnect.php");
 
 header("content-type:application/json");
 
-if($_GET['action'] == 'list'){
-      $query_list = "SELECT * FROM images_tbl";
+if(isset($_GET['action']) && $_GET['action'] == 'list'){
+      
+      $isPictura = (int) filter_var($_GET['isPictura'], FILTER_VALIDATE_BOOLEAN);
+
+
+       $query_list = "SELECT * FROM images_tbl WHERE isPictura = '$isPictura' ORDER BY submission_date DESC";
+
       $result = mysql_query($query_list) or die("error in $query_list == ----> ".mysql_error());
       $jsonResponse = array();
       
@@ -18,27 +23,25 @@ if($_GET['action'] == 'list'){
       echo json_encode($jsonResponse);
 }
 
-if($_POST['action'] == 'delete'){
-      $name = $_POST['image_id']
-      $query_delete="DELETE from images_tbl where image_id='$image_id';";
-
-      mysql_query($query_delete) or die("error in $query_delete == ----> ".mysql_error());
-
+if(isset($_POST['action']) &&  $_POST['action'] == 'delete'){
+    
       $response = array('status' => 'ok', 'msg' => 'Image deleted!');
       echo json_encode($response);
 }
 
-if($_POST['action'] == 'save'){
+if(isset($_POST['action']) && $_POST['action'] == 'save'){
 
-      $name = $_POST['payload']['name'];
-      $description = $_POST['payload']['description'];
-      $dimensions = $_POST['payload']['dimensions'];
-      $content = $_POST['payload']['content'];
+      $isPictura = (int) filter_var($_POST['isPictura'], FILTER_VALIDATE_BOOLEAN);
 
-     	$query_save="INSERT into images_tbl (image_name, image_description, image_dimensions, image_content) VALUES ('$name', '$description', '$dimensions', '$content');";
+      $name = $_POST['name'];
+      $description = $_POST['description'];
+      $dimensions = $_POST['dimensions'];
+      $content = $_POST['content'];
+
+     	$query_save="INSERT into images_tbl (title, description, dimensions, content, isPictura, submission_date) VALUES ('$name', '$description', '$dimensions', '$content', '$isPictura', now());";
     	mysql_query($query_save) or die("error in $query_save == ----> ".mysql_error());
 
-      $response = array('status' => 'ok', 'msg' => 'Image saved!');
+      $response = array('status','Image saved!');
       echo json_encode($response);
 }
 

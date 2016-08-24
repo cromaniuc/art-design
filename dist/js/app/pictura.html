@@ -3,16 +3,18 @@
 
     <!-- ko foreach: picturi -->
     <img   src="images/frame.png">
+    <img  data-bind="attr:{src: content}"/>
 
     <dl>
         <dt class="col-sm-3">Titlu</dt>
-        <dd class="col-sm-9" data-bind="text: titlu"></dd>
+        <dd class="col-sm-9" data-bind="text: title"></dd>
 
         <dt class="col-sm-3">Descriere</dt>
-        <dd class="col-sm-9" data-bind="text: descriere"></dd>
+        <dd class="col-sm-9" data-bind="text: description"></dd>
 
         <dt class="col-sm-3">Dimensiuni</dt>
-        <dd class="col-sm-9">400 x 500</dd>
+        <dd class="col-sm-9" data-bind="text: dimensions"></dd>
+
     </dl>
 
     <!-- /ko -->

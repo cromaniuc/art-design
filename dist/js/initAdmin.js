@@ -18,24 +18,48 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
         window.viewModel = self;
 
         self.fileInput = ko.observable();
+        self.fileName = ko.observable();
         self.someReader =  new FileReader();
 
+        self.saveUrl = 'api.php';
+        self.deleteUrl = 'api.php';
+        self.getUrl = 'api.php';
 
         self.saveMode = ko.observable("pictura");
-
         self.list = ko.observableArray([]);
 
-        $.get(self.getUrl, {action : "list"}).complete(function (result) {
-            self.list(result);
+        self.saveMode.subscribe(function(newValue) {
+                $.ajax({
+                url: self.getUrl,
+                type: 'get',
+                dataType: 'json',
+                success: function (result) {
+                    self.list(result);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                     alert(errorThrown);
+                },
+                data: {'action' : "list", 'isPictura': (newValue === 'pictura')}
+            });
         });
+
+
+         $.ajax({
+                url: self.getUrl,
+                type: 'get',
+                dataType: 'json',
+                success: function (result) {
+                    self.list(result);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                     alert(errorThrown);
+                },
+                data: {'action' : "list", 'isPictura': (self.saveMode() === 'pictura')}
+            });
 
         self.pageSize = ko.observable(10);
         self.pageIndex = ko.observable(0);
         self.selectedItem = ko.observable();
-        
-        self.saveUrl = 'api.php';
-        self.deleteUrl = 'api.php';
-        self.getUrl = 'api.php';
 
         self.edit = function (item) {
             self.selectedItem(item);
@@ -73,9 +97,18 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
         self.save = function () {
             var item = self.selectedItem();
 
-            $.post(self.saveUrl,  {'action' : "save", 'file' : self.fileInput}, function (result) {
-                self.selectedItem().id(result);
-                self.selectedItem(null);
+            $.ajax({
+                url: self.saveUrl,
+                type: 'post',
+                dataType: 'text',
+                success: function (result) {
+                    self.selectedItem().id(result);
+                    self.selectedItem(null);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                     alert(errorThrown);
+                },
+                data: {'action' : "save", 'isPictura': (self.saveMode() === 'pictura'), 'name' : item.title(), 'description' : item.description(), 'dimensions' : item.dimensions(), 'content' : item.content()}
             });
 
         };
@@ -114,6 +147,5 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
         };
     };
 
-    var initialData = [new Item('WA', 'Washington', 'WA', 'bla'), new Item('AK', 'Alaska', 'AK', 'bla')];
-    ko.applyBindings(new ListViewModel(initialData));
+    ko.applyBindings(new ListViewModel());
 });

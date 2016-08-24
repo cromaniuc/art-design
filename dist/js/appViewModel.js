@@ -8,22 +8,55 @@ define(['knockout-3.4.0',
     'template!app/header/pictura-header.html!pictura-header'], function(ko) {
     return function appViewModel() {
 
+        var self = this;
 
-        this.selectedView = ko.observable("despreArtist")
+        self.selectedView = ko.observable("despreArtist")
 
-        this.picturi = [{titlu: 'abc', descriere: "bla"}, {titlu: 'abc1', descriere: "bla2"}]
+        self.picturi = ko.observableArray([])
+        self.designImages = ko.observableArray([])
 
-        this.isQuoteVisible = function(){
-            return this.selectedView() === 'despreArtist' || this.selectedView() === 'contact'
+        self.getUrl = 'api.php'
+
+
+        $.ajax({
+                url: self.getUrl,
+                type: 'get',
+                dataType: 'json',
+                success: function (result) {
+                    self.picturi(result);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                     alert(errorThrown);
+                },
+                data: {'action' : "list", 'isPictura': true}
+            });
+
+
+            $.ajax({
+                url: self.getUrl,
+                type: 'get',
+                dataType: 'json',
+                success: function (result) {
+                    self.designImages(result);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                     alert(errorThrown);
+                },
+                data: {'action' : "list", 'isPictura': false}
+            });
+
+
+        self.isQuoteVisible = function(){
+            return self.selectedView() === 'despreArtist' || self.selectedView() === 'contact'
         }
 
-        this.currentHeader = ko.observable("pictura-header")
-        this.selectView = function(templateName){
-            this.selectedView(templateName);
+        self.currentHeader = ko.observable("pictura-header")
+        self.selectView = function(templateName){
+            self.selectedView(templateName);
             if(templateName === 'design'){
-                this.currentHeader('design-header')
+                self.currentHeader('design-header')
             }else{
-                this.currentHeader('pictura-header')
+                self.currentHeader('pictura-header')
             }
         }   
     };

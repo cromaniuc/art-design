@@ -59,11 +59,11 @@
 -->
     <script id="itemsTmpl" type="text/html">
         <tr>
-            <td data-bind="text: titlu"></td>
+            <td data-bind="text: title"></td>
 
             <!-- ko if: $root.saveMode() === 'pictura' -->
-            <td data-bind="text: descriere"></td>
-            <td data-bind="text: dimensiuni"></td>
+            <td data-bind="text: description"></td>
+            <td data-bind="text: dimensions"></td>
             <!-- /ko -->
 
             <td>Imagine</td>
@@ -76,23 +76,21 @@
             </td>
         </tr>
     </script>
-    <!--<h1 data-bind="text: fileName"></h1>
 
-    <output data-bind="text: fileInput"></output>-->
     <script id="editTmpl" type="text/html">
         <tr>
-            <td><input data-bind="value: titlu"/></td>
+            <td><input data-bind="value: title"/></td>
 
             <!-- ko if: $root.saveMode() === 'pictura' -->
-            <td><input data-bind="value: descriere"/></td>
-            <td><input data-bind="value: dimensiuni"/></td>
+            <td><input data-bind="value: description"/></td>
+            <td><input data-bind="value: dimensions"/></td>
             <!-- /ko -->
 
             <td>
                 <div class="form-group row">
                     <input
                             type="file" class="form-control-file"
-                            data-bind="file: {data: $root.fileInput, name: $root.fileName, reader: $root.someReader}"
+                            data-bind="file: {data: content, name: $root.fileName, reader: $root.someReader}"
                     >
                 </div>
             </td>
