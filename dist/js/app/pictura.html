@@ -6,7 +6,7 @@
         <img  class="image-overlay" data-bind="attr:{src: content}"/>
     </div>
     
-    <dl>
+    <dl class="pictura-description">
         <dt class="col-sm-3">Titlu</dt>
         <dd class="col-sm-9" data-bind="text: title"></dd>
 
@@ -17,9 +17,11 @@
         <dd class="col-sm-9" data-bind="text: dimensions"></dd>
 
     </dl>
-
     <!-- /ko -->
 
+    <!-- ko if: picturi().length == 0 -->
+        <h1>In curand vor fi incarcate...</h1>
+    <!-- /ko -->
 
 
 
