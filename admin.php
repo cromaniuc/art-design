@@ -1,4 +1,11 @@
-
+<?php
+           session_start();  
+           if (isset($_SESSION['username'])){
+                /*do nothing*/
+           }else {
+                header("Location: login.html"); 
+           }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,14 +18,7 @@
 
 </head>
 <body>
-<?php
-           session_start();  
-           if (isset($_SESSION['username'])){
-                /*do nothing*/
-           }else {
-                header("Location: login.html"); 
-           }
-?>
+
 <div class="container my-custom-container">
 
     <fieldset class="form-group row">
