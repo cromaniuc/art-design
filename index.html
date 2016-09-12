@@ -7,7 +7,7 @@
     <link href="dist/css/main.css" rel="stylesheet">
     <script type='text/javascript' src='dist/js/knockout-3.4.0.js'></script>
     <link href='http://fonts.googleapis.com/css?family=Berkshire+Swash' rel='stylesheet' type='text/css'>
-    
+
 </head>
 <body>
 <div class="container my-custom-container">
@@ -16,7 +16,7 @@
     </div>
     <!-- ko if: $root.isQuoteVisible() -->
     <blockquote class="blockquote blockquote-reverse">
-        <p class="m-b-0">Lucrurile nu sunt greu de făcut. Greu este să te pui în starea de a le face.</p>
+        <p class="m-b-0">"Lucrurile nu sunt greu de făcut. Greu este să te pui în starea de a le face."</p>
         <footer class="blockquote-footer"><cite title="Source Title">Constantin Brâncuși</cite></footer>
     </blockquote>
     <!-- /ko -->
@@ -26,7 +26,8 @@
         <nav class="navbar navbar-dark bg-primary">
             <ul class="nav navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" data-bind="click: function(){selectView('despreArtist')}" href="#">despre artist <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" data-bind="click: function(){selectView('despreArtist')}" href="#">despre artist
+                        <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bind="click:  function(){ selectView('pictura')}" href="#">pictura</a>
@@ -43,12 +44,16 @@
     <div class="row top-buffer">
 
 
-         <div data-bind="template: { name: selectedView}"></div>
+        <div data-bind="template: { name: selectedView}"></div>
 
     </div>
 </div>
 
-
+<div class="modal" style="display: none">
+    <div class="center">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>

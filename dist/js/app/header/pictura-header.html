@@ -1,11 +1,16 @@
 <div class="pictura-header-wrapper">
-<img src="images/pictura-header.jpg">
-<div class="overlay">
-    <h2 class="text-header">Ciprian  Romaniuc
-    </h2>
-    <h3>
-        artist  vizual
-    </h3>
+    <img src="images/pictura-header.jpg">
+    <div class="overlay">
+        <h2 class="text-header">Ciprian Romaniuc
+        </h2>
+        <h3 class="text-sub-header">
+            <!-- ko if: $root.selectedView() === 'pictura'-->
+            pictura
+            <!-- /ko -->
+            <!-- ko if: $root.selectedView() !== 'pictura'-->
+            artist vizual
+            <!-- /ko -->
+        </h3>
 
-</div>
+    </div>
 </div>

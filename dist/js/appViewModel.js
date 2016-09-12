@@ -5,7 +5,7 @@ define(['knockout-3.4.0',
     'template!app/contact.html!contact',
     'template!app/despreArtist.html!despreArtist',
     'template!app/header/design-header.html!design-header',
-    'template!app/header/pictura-header.html!pictura-header'], function(ko) {
+    'template!app/header/pictura-header.html!pictura-header'], function (ko) {
     return function appViewModel() {
 
         var self = this;
@@ -18,46 +18,57 @@ define(['knockout-3.4.0',
         self.getUrl = 'api.php'
 
 
-        $.ajax({
-                url: self.getUrl,
-                type: 'get',
-                dataType: 'json',
-                success: function (result) {
-                    self.picturi(result);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                     alert(errorThrown);
-                },
-                data: {'action' : "list", 'isPictura': true}
-            });
-
-
-            $.ajax({
-                url: self.getUrl,
-                type: 'get',
-                dataType: 'json',
-                success: function (result) {
-                    self.designImages(result);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                     alert(errorThrown);
-                },
-                data: {'action' : "list", 'isPictura': false}
-            });
-
-
-        self.isQuoteVisible = function(){
+        self.isQuoteVisible = function () {
             return self.selectedView() === 'despreArtist' || self.selectedView() === 'contact'
         }
 
         self.currentHeader = ko.observable("pictura-header")
-        self.selectView = function(templateName){
+        self.selectView = function (templateName) {
             self.selectedView(templateName);
-            if(templateName === 'design'){
+            if (templateName === 'design') {
                 self.currentHeader('design-header')
-            }else{
+                $.ajax({
+                    url: self.getUrl,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (result) {
+                        self.designImages(result);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    },
+                    data: {'action': "list", 'isPictura': false},
+                    beforeSend: function () {
+                        $(".modal").show();
+                    },
+                    complete: function () {
+                        $(".modal").hide();
+                    }
+                });
+            } else {
                 self.currentHeader('pictura-header')
             }
-        }   
+
+            if (templateName === 'pictura') {
+                $.ajax({
+                    url: self.getUrl,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (result) {
+                        self.picturi(result);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    },
+                    data: {'action': "list", 'isPictura': true},
+                    beforeSend: function () {
+                        $(".modal").show();
+                    },
+                    complete: function () {
+                        $(".modal").hide();
+                    }
+                });
+            }
+        }
     };
 });

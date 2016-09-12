@@ -1,10 +1,15 @@
 <div class="text-xs-center">
-	<!-- ko foreach: designImages -->
-   		<img class="img-fluid img-thumbnail m-b-2"  data-bind="attr:{src: content}">
+    <!-- ko foreach: designImages -->
+    <div class="row">
+        <img class="img-fluid img-thumbnail m-b-2" data-bind="attr:{src: content}">
+    </div>
+    <div class="row p-b-3">
+        <span data-bind="text: title"></span>
+    </div>
     <!-- /ko -->
     <!-- ko if: designImages().length == 0 -->
-        <h1>In curand vor fi incarcate...</h1>
+    <h1>In curand vor fi incarcate...</h1>
     <!-- /ko -->
-	
+
 </div>
 

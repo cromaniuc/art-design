@@ -10,7 +10,7 @@ if(isset($_GET['action']) && $_GET['action'] == 'list'){
       $isPictura = (int) filter_var($_GET['isPictura'], FILTER_VALIDATE_BOOLEAN);
 
 
-       $query_list = "SELECT * FROM images_tbl WHERE isPictura = '$isPictura' ORDER BY submission_date DESC";
+       $query_list = "SELECT * FROM images_tbl WHERE isPictura = '$isPictura' ORDER BY submission_date";
 
       $result = mysql_query($query_list) or die("error in $query_list == ----> ".mysql_error());
       $jsonResponse = array();
@@ -46,6 +46,21 @@ if(isset($_POST['action']) && $_POST['action'] == 'save'){
     	mysql_query($query_save) or die("error in $query_save == ----> ".mysql_error());
 
       $response = array('status' => 'ok', 'msg' => 'Image saved!');
+      echo json_encode($response);
+}
+
+if(isset($_POST['action']) && $_POST['action'] == 'update'){
+
+
+      $id = $_POST['id'];
+      $name = $_POST['name'];
+      $description = $_POST['description'];
+      $dimensions = $_POST['dimensions'];
+
+     	$query_update="UPDATE images_tbl SET title='$name', description='$description', dimensions='$dimensions' WHERE id = '$id'";
+    	mysql_query($query_update) or die("error in $query_update == ----> ".mysql_error());
+
+      $response = array('status' => 'ok', 'msg' => 'Image updated!');
       echo json_encode($response);
 }
 

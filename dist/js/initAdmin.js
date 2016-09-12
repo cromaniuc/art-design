@@ -4,8 +4,8 @@ requirejs.config({
     }
 });
 
-require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
-    function Item(id, title, description, dimensions, content){
+require(['knockout-3.4.0', 'knockout-file-bind'], function (ko, fileBind) {
+    function Item(id, title, description, dimensions, content) {
         this.id = ko.observable(id);
         this.title = ko.observable(title);
         this.description = ko.observable(description);
@@ -19,7 +19,7 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
 
         self.fileInput = ko.observable();
         self.fileName = ko.observable();
-        self.someReader =  new FileReader();
+        self.someReader = new FileReader();
 
         self.saveUrl = 'api.php';
         self.deleteUrl = 'api.php';
@@ -28,34 +28,46 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
         self.saveMode = ko.observable("pictura");
         self.list = ko.observableArray([]);
 
-        self.saveMode.subscribe(function(newValue) {
-                $.ajax({
+        self.saveMode.subscribe(function (newValue) {
+            $.ajax({
                 url: self.getUrl,
                 type: 'get',
                 dataType: 'json',
                 success: function (result) {
                     self.list(result);
                 },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                     alert(errorThrown);
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
                 },
-                data: {'action' : "list", 'isPictura': (newValue === 'pictura')}
+                data: {'action': "list", 'isPictura': (newValue === 'pictura')},
+                beforeSend: function () {
+                    $(".modal").show();
+                },
+                complete: function () {
+                    $(".modal").hide();
+                }
             });
         });
 
 
-         $.ajax({
-                url: self.getUrl,
-                type: 'get',
-                dataType: 'json',
-                success: function (result) {
-                    self.list(result);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                     alert(errorThrown);
-                },
-                data: {'action' : "list", 'isPictura': (self.saveMode() === 'pictura')}
-            });
+        $.ajax({
+            url: self.getUrl,
+            type: 'get',
+            dataType: 'json',
+            success: function (result) {
+                self.list(result);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            },
+            data: {'action': "list", 'isPictura': (self.saveMode() === 'pictura')},
+            beforeSend: function () {
+                $(".modal").show();
+            },
+            complete: function () {
+                $(".modal").hide();
+            }
+        });
 
         self.pageSize = ko.observable(10);
         self.pageIndex = ko.observable(0);
@@ -79,21 +91,27 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
             if (item.id) {
                 if (confirm('Are you sure you wish to delete this item?')) {
 
-                      $.ajax({
+                    $.ajax({
                         url: self.deleteUrl,
                         type: 'post',
                         dataType: 'text',
                         success: function (result) {
                             self.list.remove(item);
                             if (self.pageIndex() > self.maxPageIndex()) {
-                                    self.moveToPage(self.maxPageIndex());
+                                self.moveToPage(self.maxPageIndex());
                             }
                         },
-                        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                             alert(errorThrown);
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert(errorThrown);
                         },
-                        data: {'action' : "delete", 'id': item.id}
-                      });
+                        data: {'action': "delete", 'id': item.id},
+                        beforeSend: function () {
+                            $(".modal").show();
+                        },
+                        complete: function () {
+                            $(".modal").hide();
+                        }
+                    });
                 }
             }
             else {
@@ -106,19 +124,61 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
         self.save = function () {
             var item = self.selectedItem();
 
-            $.ajax({
-                url: self.saveUrl,
-                type: 'post',
-                dataType: 'text',
-                success: function (result) {
-                    self.selectedItem().id(result);
-                    self.selectedItem(null);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                     alert(errorThrown);
-                },
-                data: {'action' : "save", 'isPictura': (self.saveMode() === 'pictura'), 'name' : item.title(), 'description' : item.description(), 'dimensions' : item.dimensions(), 'content' : item.content()}
-            });
+            if (item.id && ko.isObservable(item.id)) {
+                $.ajax({
+                    url: self.saveUrl,
+                    type: 'post',
+                    dataType: 'text',
+                    success: function (result) {
+                        self.selectedItem().id(result);
+                        self.selectedItem(null);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    },
+                    data: {
+                        'action': "save",
+                        'isPictura': (self.saveMode() === 'pictura'),
+                        'name': item.title(),
+                        'description': item.description(),
+                        'dimensions': item.dimensions(),
+                        'content': item.content()
+                    }
+                    , beforeSend: function () {
+                        $(".modal").show();
+                    },
+                    complete: function () {
+                        $(".modal").hide();
+                    }
+                });
+
+            } else {
+                $.ajax({
+                    url: self.saveUrl,
+                    type: 'post',
+                    dataType: 'text',
+                    success: function (result) {
+                        self.selectedItem(null);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    },
+                    data: {
+                        'action': "update",
+                        'name': item.title,
+                        'description': item.description,
+                        'dimensions': item.dimensions,
+                        'id': item.id
+                    }
+                    , beforeSend: function () {
+                        $(".modal").show();
+                    },
+                    complete: function () {
+                        $(".modal").hide();
+                    }
+                });
+            }
+
 
         };
 
@@ -146,8 +206,8 @@ require(['knockout-3.4.0', 'knockout-file-bind'], function(ko, fileBind) {
         };
         self.allPages = ko.dependentObservable(function () {
             var pages = [];
-            for (i = 0; i <= self.maxPageIndex() ; i++) {
-                pages.push({ pageNumber: (i + 1) });
+            for (i = 0; i <= self.maxPageIndex(); i++) {
+                pages.push({pageNumber: (i + 1)});
             }
             return pages;
         });
